@@ -10,6 +10,7 @@ import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -22,7 +23,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup.InlineKeyboardMarkupBuilder;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -39,14 +39,16 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
     private final List<BotCommand> commandList = new ArrayList<>();
-    private final CurrencyModeService currencyModeService = CurrencyModeService.getService();
+    @Autowired
+    private  CurrencyModeService currencyModeService;
+    @Autowired
+    private CurrencyConversionService currencyConversionService;
 
-    private final CurrencyConversionService currencyConversionService = CurrencyConversionService.getInstance();
-
-    private final String HELP_TEXT = "If you want to start conversation with bot write /start\n"
-        + "If you would like to set initial and target currency write /set_initial_target_currency\n"
-        + "If you would like to set the amount write /set_amount\n"
-        + "Make note: the default value of initial currency is UAN, the default value of target currency is USD!";
+    private final String HELP_TEXT = """
+        If you want to start conversation with bot write /start
+        If you would like to set initial and target currency write /set_initial_target_currency
+        If you would like to set the amount write /set_amount
+        Make note: the default value of initial currency is UAN, the default value of target currency is USD!""";
 
     @Autowired
     private UserRepository repository;
@@ -114,53 +116,67 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     private void handleMessage(Message message) {
         if (message.hasText() && message.hasEntities()) {
-//            if (message.getEntities() == null) {
-//                sendMessage(message.getChatId(), "It isn`t a command!", message.getChat().getUserName());
-//            } else {
-                Optional<MessageEntity> messageEntity = message.getEntities().stream().filter(e -> "bot_command".equals(e.getType())).findFirst();
-                if (messageEntity.isPresent()) {
-                    String command = message.getText().substring(messageEntity.get().getOffset(), messageEntity.get().getLength());
-                    switch (command) {
-                        case "/start" -> {
-                            registerUser(message);
-                            sendMessage(message.getChatId(), "Hello, " + message.getChat().getUserName() + ", welcome to the currency bot!" + EmojiParser.parseToUnicode(":wave:"), message.getChat().getUserName());
-                            sendMessage(message.getChatId(), "Choose the initial and target currency:", getInlineKeyBoard(message.getChatId()), message.getChat().getUserName());
-                            sendMessage(message.getChatId(), "Enter the sum: ", message.getChat().getUserName());
-                        }
-                        case "/help" ->
-                            sendMessage(message.getChatId(), HELP_TEXT, message.getChat().getUserName());
-                        case "/set_initial_target_currency" -> {
-                            sendMessage(message.getChatId(), "Choose the initial and target currency:", getInlineKeyBoard(message.getChatId()), message.getChat().getUserName());
-                        }
-                        case "/set_amount" ->
-                            sendMessage(message.getChatId(), "Enter the sum: ", message.getChat().getUserName());
-                        default ->
-                            sendMessage(message.getChatId(), "Sorry, command was not recognized. PLease, choose another one.", message.getChat().getUserName());
+            Optional<MessageEntity> messageEntity = message.getEntities().stream().filter(e -> "bot_command".equals(e.getType())).findFirst();
+            if (messageEntity.isPresent()) {
+                String command = message.getText().substring(messageEntity.get().getOffset(), messageEntity.get().getLength());
+                switch (command) {
+                    case "/start" -> {
+                        registerUser(message);
+                        sendMessage(message.getChatId(), "Hello, " + message.getChat().getFirstName() + ", welcome to the currency bot!" + EmojiParser.parseToUnicode(":wave:"), message.getChat().getUserName());
+                        sendMessage(message.getChatId(), "Choose the initial and target currency:", getInlineKeyBoard(message.getChatId()), message.getChat().getUserName());
+                        sendMessage(message.getChatId(), "Enter the sum: ", message.getChat().getUserName());
                     }
+                    case "/help" ->
+                        sendMessage(message.getChatId(), HELP_TEXT, message.getChat().getUserName());
+                    case "/set_initial_target_currency" ->
+                        sendMessage(message.getChatId(), "Choose the initial and target currency:", getInlineKeyBoard(message.getChatId()), message.getChat().getUserName());
+                    case "/set_amount" ->
+                        sendMessage(message.getChatId(), "Enter the sum: ", message.getChat().getUserName());
+                    default ->
+                        sendMessage(message.getChatId(), "Sorry, command was not recognized. PLease, choose another one.", message.getChat().getUserName());
                 }
             }
-        if (message.hasText()) {
-            String messageText = message.getText();
-            Optional<Double> value = parseDouble(messageText);
-            Currency initialCurrency = currencyModeService.getInitialCurrency(message.getChatId());
-            Currency targetCurrency = currencyModeService.getTargetCurrency(message.getChatId());
-            double ratio = currencyConversionService.getConversionRatio(initialCurrency, targetCurrency);
-            if (value.isPresent()) {
-                    sendMessage(message.getChatId(), String.format(
-                        "%4.2f %s is %4.2f %s",
-                        value.get(), initialCurrency, (value.get() * ratio), targetCurrency), message.getChat().getUserName());
-            }
+        }
+        else if (message.hasText()) {
+            sendMessage(message.getChatId(), handleMessageDigit(message), message.getChat().getUserName());
         }
         log.info("Handle message.");
     }
 
-    private Optional<Double> parseDouble(String messageText) {
-        try {
-            return Optional.of(Double.valueOf(messageText));
-        } catch (Exception e) {
-            log.error("Error parsing double: " + e.getMessage());
-            return Optional.empty();
+    private String handleMessageDigit(Message message) {
+        String messageText = message.getText();
+        double resValue;
+        String messageToSend;
+        Optional<Double> value = parseDouble(messageText);
+        if (value.isPresent()) {
+            Currency initialCurrency = currencyModeService.getInitialCurrency(message.getChatId());
+            Currency targetCurrency = currencyModeService.getTargetCurrency(message.getChatId());
+            try {
+                resValue = currencyConversionService.getResultCurrency(initialCurrency,
+                    targetCurrency, value);
+                messageToSend = String.format(
+                    "%4.2f %s is %4.2f %s",
+                    value.get(), initialCurrency, resValue, targetCurrency);
+            } catch (HttpClientErrorException ex) {
+                messageToSend = "Please, retry after a few seconds.";
+                log.error("Runtime exception: " + ex.getMessage());
+            }
+        } else {
+            messageToSend = "Please, write only a digit number!";
         }
+        return messageToSend;
+    }
+
+    private Optional<Double> parseDouble(String messageText) {
+        if (messageText.matches("\\d{1,10}(\\.\\d*)?")) {
+            try {
+                return Optional.of(Double.valueOf(messageText));
+            } catch (Exception e) {
+                log.error("Error parsing double: " + e.getMessage());
+                return Optional.empty();
+            }
+        }
+        return Optional.empty();
     }
 
     private void registerUser(Message message) {
