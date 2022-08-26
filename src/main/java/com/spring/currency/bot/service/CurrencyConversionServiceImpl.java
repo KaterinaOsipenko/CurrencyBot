@@ -14,13 +14,16 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
 
   @Autowired
   private MonobankServiceAPI monobankService;
+
+  private List<MonobankCurrency> allCurrencies;
+
   @Override
   public double getResultCurrency(Currency initial, Currency target, Optional<Double> value) {
     double resValue;
     double ratio;
     if (value.isPresent()) {
-      List<MonobankCurrency> allCurrencies = monobankService.getAllCurrencies();
-      ratio = getRatio(initial, target, allCurrencies);
+      allCurrencies = monobankService.getAllCurrencies();
+      ratio = getRatio(initial, target);
       if (initial == Currency.UAN) {
         resValue = (1 / ratio) * value.get();
       } else {
@@ -34,9 +37,9 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
     return resValue;
   }
 
-  private double getRatio(Currency initial, Currency target, List<MonobankCurrency> allCurrencies) {
+  private double getRatio(Currency initial, Currency target) {
     double ratio;
-    MonobankCurrency currency = getCurrency(initial, target, allCurrencies);
+    MonobankCurrency currency = getCurrency(initial, target);
 
     if (initial == Currency.UAN) {
       ratio = currency.getRateSell();
@@ -47,26 +50,24 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
     return ratio;
   }
 
-  private MonobankCurrency getCurrency(Currency initial, Currency target, List<MonobankCurrency> allCurrencies) {
+  private MonobankCurrency getCurrency(Currency initial, Currency target) {
     MonobankCurrency currency;
 
     if (initial == Currency.UAN) {
-      currency = allCurrencies.stream().filter(monobankCurrency ->
-              monobankCurrency.getCurrencyCodeA() == target.code
-                  && monobankCurrency.getCurrencyCodeB() == initial.code)
-          .findAny().get();
+      currency = getOneCurrency(target, initial);
     } else if (initial == Currency.EUR || target == Currency.UAN){
-      currency = allCurrencies.stream().filter(monobankCurrency ->
-              monobankCurrency.getCurrencyCodeA() == initial.code
-                  && monobankCurrency.getCurrencyCodeB() == target.code)
-          .findAny().get();
+      currency = getOneCurrency(initial, target);
     } else {
-      currency = allCurrencies.stream().filter(monobankCurrency ->
-              monobankCurrency.getCurrencyCodeA() == target.code
-                  && monobankCurrency.getCurrencyCodeB() == initial.code)
-          .findAny().get();
+      currency = getOneCurrency(target, initial);
     }
     return currency;
+  }
+
+  private MonobankCurrency getOneCurrency(Currency initial, Currency target) {
+    return allCurrencies.stream().filter(monobankCurrency ->
+            monobankCurrency.getCurrencyCodeA() == initial.code
+                && monobankCurrency.getCurrencyCodeB() == target.code)
+        .findAny().get();
   }
 
 

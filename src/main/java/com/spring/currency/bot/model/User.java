@@ -1,5 +1,6 @@
 package com.spring.currency.bot.model;
 
+import java.io.Serializable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,7 +12,7 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @ToString
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

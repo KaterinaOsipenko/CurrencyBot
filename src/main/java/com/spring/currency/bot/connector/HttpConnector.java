@@ -17,6 +17,7 @@ public class HttpConnector {
   private MonobankAPI monobankAPI;
 
   public ResponseEntity<MonobankCurrency[]> getCurrencies() {
+    log.info("Connecting to API...");
     RestTemplate restTemplate = new RestTemplate();
     ResponseEntity<MonobankCurrency[]> response;
     try {
