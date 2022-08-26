@@ -41,7 +41,9 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
     double ratio;
     MonobankCurrency currency = getCurrency(initial, target);
 
-    if (initial == Currency.UAN) {
+    if (currency.getRateCross() != 0) {
+      ratio = currency.getRateCross();
+    } else if (initial == Currency.UAN) {
       ratio = currency.getRateSell();
     } else {
       ratio = currency.getRateBuy();
@@ -55,7 +57,7 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
 
     if (initial == Currency.UAN) {
       currency = getOneCurrency(target, initial);
-    } else if (initial == Currency.EUR || target == Currency.UAN){
+    } else if (initial == Currency.EUR || target == Currency.UAN) {
       currency = getOneCurrency(initial, target);
     } else {
       currency = getOneCurrency(target, initial);
