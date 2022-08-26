@@ -87,3 +87,48 @@
 2022-08-26 09:57:43,843 INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
 2022-08-26 09:57:43,844 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
 2022-08-26 09:57:43,851 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
+2022-08-26 10:51:31,286 INFO com.spring.currency.bot.SpingCurrencyBotApplication [main] Starting SpingCurrencyBotApplication using Java 17.0.2 on sladkiychay3005 with PID 19056 (D:\Studying\tg-bots\sping-currency-bot\target\classes started by Дом in D:\Studying\tg-bots\sping-currency-bot)
+2022-08-26 10:51:31,317 INFO com.spring.currency.bot.SpingCurrencyBotApplication [main] No active profile set, falling back to 1 default profile: "default"
+2022-08-26 10:51:32,251 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-26 10:51:32,329 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 81 ms. Found 1 JPA repository interfaces.
+2022-08-26 10:51:32,892 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat initialized with port(s): 8080 (http)
+2022-08-26 10:51:32,907 INFO org.apache.coyote.http11.Http11NioProtocol [main] Initializing ProtocolHandler ["http-nio-8080"]
+2022-08-26 10:51:32,907 INFO org.apache.catalina.core.StandardService [main] Starting service [Tomcat]
+2022-08-26 10:51:32,907 INFO org.apache.catalina.core.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-08-26 10:51:33,032 INFO org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [main] Initializing Spring embedded WebApplicationContext
+2022-08-26 10:51:33,032 INFO org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 1637 ms
+2022-08-26 10:51:33,204 INFO org.hibernate.jpa.internal.util.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-26 10:51:33,251 INFO org.hibernate.Version [main] HHH000412: Hibernate ORM core version 5.6.10.Final
+2022-08-26 10:51:33,407 INFO org.hibernate.annotations.common.Version [main] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-26 10:51:33,564 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Starting...
+2022-08-26 10:51:35,454 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Start completed.
+2022-08-26 10:51:35,470 INFO org.hibernate.dialect.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-08-26 10:51:36,783 INFO org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator [main] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-26 10:51:36,798 INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-26 10:51:37,157 INFO com.spring.currency.bot.TelegramBot [main] Bot creation
+2022-08-26 10:51:37,751 INFO com.spring.currency.bot.TelegramBot [main] Set commands to the bot
+2022-08-26 10:51:37,767 INFO com.spring.currency.bot.service.HashMapCurrencyModeService [main] HashMapCurrencyService created!
+2022-08-26 10:51:38,001 WARN org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-26 10:51:38,282 INFO org.apache.coyote.http11.Http11NioProtocol [main] Starting ProtocolHandler ["http-nio-8080"]
+2022-08-26 10:51:38,314 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat started on port(s): 8080 (http) with context path ''
+2022-08-26 10:51:38,380 INFO com.spring.currency.bot.SpingCurrencyBotApplication [main] Started SpingCurrencyBotApplication in 7.926 seconds (JVM running for 10.357)
+2022-08-26 10:52:25,161 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Registered user with username: User(chatId=481582091, username=sladkiy_chay, firstName=null, lastName=null, registerDate=2022-08-26 10:52:24.801)
+2022-08-26 10:52:25,302 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Replied to user: sladkiy_chay
+2022-08-26 10:52:25,390 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Replied to user: sladkiy_chay
+2022-08-26 10:52:25,469 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Replied to user: sladkiy_chay
+2022-08-26 10:52:25,469 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Handle message.
+2022-08-26 10:52:27,979 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Handle callback query from keyboard.
+2022-08-26 10:52:28,756 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Handle callback query from keyboard.
+2022-08-26 10:52:29,722 INFO com.spring.currency.bot.connector.HttpConnector [CurrCurrencyBot Telegram Executor] Connecting to API...
+2022-08-26 10:52:30,344 INFO com.spring.currency.bot.service.MonobankService [CurrCurrencyBot Telegram Executor] Receiving all currencies from API response.
+2022-08-26 10:52:30,344 INFO com.spring.currency.bot.service.CurrencyConversionServiceImpl [CurrCurrencyBot Telegram Executor] Converting of value done.
+2022-08-26 10:52:30,422 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Replied to user: sladkiy_chay
+2022-08-26 10:52:30,422 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Handle message.
+2022-08-26 10:52:37,626 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Handle callback query from keyboard.
+2022-08-26 10:52:38,908 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Handle callback query from keyboard.
+2022-08-26 10:52:40,318 INFO com.spring.currency.bot.service.CurrencyConversionServiceImpl [CurrCurrencyBot Telegram Executor] Converting of value done.
+2022-08-26 10:52:40,511 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Replied to user: sladkiy_chay
+2022-08-26 10:52:40,511 INFO com.spring.currency.bot.TelegramBot [CurrCurrencyBot Telegram Executor] Handle message.
+2022-08-26 11:41:09,448 INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-08-26 11:41:09,495 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2022-08-26 11:41:09,589 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
