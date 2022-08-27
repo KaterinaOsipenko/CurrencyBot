@@ -20,7 +20,7 @@ public class HashMapCurrencyModeService implements CurrencyModeService{
 
     @Override
     public Currency getInitialCurrency(long chatId) {
-        return initialCurrency.getOrDefault(chatId, Currency.USD);
+        return initialCurrency.getOrDefault(chatId, Currency.UAN);
     }
 
     @Override
