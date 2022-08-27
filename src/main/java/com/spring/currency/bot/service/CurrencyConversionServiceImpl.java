@@ -5,6 +5,7 @@ import com.spring.currency.bot.model.MonobankCurrency;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,20 +21,40 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
   @Override
   public double getResultCurrency(Currency initial, Currency target, Optional<Double> value) {
     double resValue;
-    double ratio;
     if (value.isPresent()) {
       allCurrencies = monobankService.getAllCurrencies();
-      ratio = getRatio(initial, target);
-      if (initial == Currency.UAN) {
-        resValue = (1 / ratio) * value.get();
-      } else {
-        resValue = value.get() * ratio;
-      }
+      resValue = getConvertValue(initial, target, value.get());
     } else {
       log.error("There is no value in sum field");
       return 0;
     }
     log.info("Converting of value done.");
+    return resValue;
+  }
+
+  private double getConvertValue(Currency initial, Currency target, Double value) {
+    double resValue;
+    double foreignCurrencyRatio;
+    double foreignVal;
+
+    if (initial != Currency.UAN && target != Currency.UAN) {
+      if (initial != Currency.USD || initial != Currency.EUR) {
+        foreignCurrencyRatio = getRatio(initial, Currency.UAN);
+
+        foreignVal = value * foreignCurrencyRatio;
+
+        value = foreignVal;
+
+        initial = Currency.UAN;
+      }
+    }
+
+    double ratio = getRatio(initial, target);
+    if (initial == Currency.UAN) {
+      resValue = (1 / ratio) * value;
+    } else {
+      resValue = value * ratio;
+    }
     return resValue;
   }
 
