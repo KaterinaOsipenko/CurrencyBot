@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class HashMapCurrencyModeService implements CurrencyModeService{
 
-    private Map<Long, Currency> initialCurrency = new HashMap<>();
-    private Map<Long, Currency> targetCurrency = new HashMap<>();
+    private final Map<Long, Currency> initialCurrency = new HashMap<>();
+    private final Map<Long, Currency> targetCurrency = new HashMap<>();
 
     public HashMapCurrencyModeService() {
         log.info("HashMapCurrencyService created!");

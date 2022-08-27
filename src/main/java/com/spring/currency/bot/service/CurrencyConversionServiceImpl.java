@@ -5,7 +5,6 @@ import com.spring.currency.bot.model.MonobankCurrency;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,10 +24,10 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
       allCurrencies = monobankService.getAllCurrencies();
       resValue = getConvertValue(initial, target, value.get());
     } else {
-      log.error("There is no value in sum field");
+      log.error("CurrencyConversionServiceImpl: There is no value in value field");
       return 0;
     }
-    log.info("Converting of value done.");
+    log.info("CurrencyConversionServiceImpl: Converting of value done.");
     return resValue;
   }
 
@@ -38,15 +37,13 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
     double foreignVal;
 
     if (initial != Currency.UAN && target != Currency.UAN) {
-      if (initial != Currency.USD || initial != Currency.EUR) {
-        foreignCurrencyRatio = getRatio(initial, Currency.UAN);
+      foreignCurrencyRatio = getRatio(initial, Currency.UAN);
 
-        foreignVal = value * foreignCurrencyRatio;
+      foreignVal = value * foreignCurrencyRatio;
 
-        value = foreignVal;
+      value = foreignVal;
 
-        initial = Currency.UAN;
-      }
+      initial = Currency.UAN;
     }
 
     double ratio = getRatio(initial, target);
@@ -55,6 +52,7 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
     } else {
       resValue = value * ratio;
     }
+    log.info("CurrencyConversionServiceImpl: converting currency...");
     return resValue;
   }
 
@@ -69,16 +67,14 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
     } else {
       ratio = currency.getRateBuy();
     }
-
+    log.info("CurrencyConversionServiceImpl: receiving ratio from currency entity");
     return ratio;
   }
 
   private MonobankCurrency getCurrency(Currency initial, Currency target) {
     MonobankCurrency currency;
 
-    if (initial == Currency.UAN) {
-      currency = getOneCurrency(target, initial);
-    } else if (initial == Currency.EUR || target == Currency.UAN) {
+    if (target == Currency.UAN) {
       currency = getOneCurrency(initial, target);
     } else {
       currency = getOneCurrency(target, initial);
@@ -87,6 +83,7 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
   }
 
   private MonobankCurrency getOneCurrency(Currency initial, Currency target) {
+    log.info("CurrencyConversionServiceImpl: receiving required entity from list of all entities.");
     return allCurrencies.stream().filter(monobankCurrency ->
             monobankCurrency.getCurrencyCodeA() == initial.code
                 && monobankCurrency.getCurrencyCodeB() == target.code)

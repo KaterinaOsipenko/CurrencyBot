@@ -25,7 +25,4 @@ public class User implements Serializable {
     private String lastName;
 
     private Timestamp registerDate;
-
-
-
 }
