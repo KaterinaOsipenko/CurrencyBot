@@ -48,6 +48,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         If you want to start conversation with bot write /start
         If you would like to set initial and target currency write /set_initial_target_currency
         If you would like to set the amount write /set_amount
+        If you want to find out your current mode of currencies write /check_initial_target_currency
         Make note: the default value of initial currency is UAN, the default value of target currency is USD!""";
 
     @Autowired
@@ -73,6 +74,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         this.commandList.add(new BotCommand("/set_initial_target_currency", "set initial and target currency"));
         this.commandList.add(new BotCommand("/help", "more info"));
         this.commandList.add(new BotCommand("/set_amount", "set the amount you want to transfer"));
+        this.commandList.add(new BotCommand("/check_initial_target_currency", "check your currency"));
         try {
             execute(new SetMyCommands(commandList, new BotCommandScopeDefault(), null));
             log.info("Set commands to the bot");
@@ -95,7 +97,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         String[] param = callback.getData().split(":");
         String action = param[0];
         Currency currency = Currency.valueOf(param[1].trim());
-        System.out.println(currency);
         switch (action) {
             case "INITIAL" -> currencyModeService.setInitialCurrency(message.getChatId(), currency);
             case "TARGET" -> currencyModeService.setTargetCurrency(message.getChatId(), currency);
@@ -128,6 +129,9 @@ public class TelegramBot extends TelegramLongPollingBot {
                     }
                     case "/help" ->
                         sendMessage(message.getChatId(), HELP_TEXT, message.getChat().getUserName());
+                    case "/check_initial_target_currency" ->
+                        sendMessage(message.getChatId(), "Your initial currency is " + currencyModeService.getInitialCurrency(message.getChatId()) + " and target currency is "
+                        + currencyModeService.getTargetCurrency(message.getChatId()), message.getChat().getUserName());
                     case "/set_initial_target_currency" ->
                         sendMessage(message.getChatId(), "Choose the initial and target currency:", getInlineKeyBoard(message.getChatId()), message.getChat().getUserName());
                     case "/set_amount" ->
