@@ -267,6 +267,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             user.setRegisterDate(new Timestamp(System.currentTimeMillis()));
 
             repository.save(user);
+
             log.info("Registered user with username: " + user);
         }
     }

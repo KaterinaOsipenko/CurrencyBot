@@ -8,17 +8,19 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-@Entity(name = "Users")
+
 @Getter
 @Setter
 @ToString
+@Entity(name = "User")
+@Table(name = "Users")
 public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long chatId;
 
-
+    @Column(name = "username")
     private String username;
 
     @Column(name = "first_name")
