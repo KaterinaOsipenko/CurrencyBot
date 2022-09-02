@@ -6,4 +6,6 @@ import java.util.Optional;
 public interface CurrencyConversionService {
   double getResultCurrency(Currency initial, Currency target, Optional<Double> value);
 
+  String getRate(Currency initial, Currency target);
+
 }

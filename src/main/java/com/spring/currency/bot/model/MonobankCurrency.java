@@ -1,13 +1,8 @@
 package com.spring.currency.bot.model;
 
-import com.spring.currency.bot.service.MonobankService;
-import java.util.Date;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 @Getter
-@ToString
 public class MonobankCurrency {
 
   private int currencyCodeA;
@@ -22,4 +17,13 @@ public class MonobankCurrency {
 
   private double rateCross;
 
+  @Override
+  public String toString() {
+    if (rateCross == 0) {
+      return Currency.findByCode(currencyCodeA).name() + " to " + Currency.findByCode(currencyCodeB).name() + ":\n"
+          + "Rate buy: " + rateBuy + "\nRate sell: " + rateSell;
+    }
+    return Currency.findByCode(currencyCodeA).name() + " to " + Currency.findByCode(currencyCodeB).name() + ":\n"
+        + "Rate cross: " + rateCross;
+  }
 }

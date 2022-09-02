@@ -31,6 +31,26 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
     return resValue;
   }
 
+  @Override
+  public String getRate(Currency initial, Currency target) {
+    log.info("CurrencyConversionServiceImpl: getting rate.");
+    allCurrencies = monobankService.getAllCurrencies();
+
+    Optional<MonobankCurrency> currency = getCurrency(initial, target);
+    if (currency.isEmpty()) {
+      currency = getCurrency(target, initial);
+    }
+
+    if (currency.isPresent()) {
+      MonobankCurrency monobankCurrency = currency.get();
+      return monobankCurrency.toString();
+    } else {
+      log.error("CurrencyConversionServiceImpl: there is no value currencies.");
+      return "There is no data for these currencies.";
+    }
+  }
+
+
   private double getConvertValue(Currency initial, Currency target, Double value) {
     double resValue;
     double foreignCurrencyRatio;
@@ -57,37 +77,45 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService{
   }
 
   private double getRatio(Currency initial, Currency target) {
-    double ratio;
-    MonobankCurrency currency = getCurrency(initial, target);
+    double ratio = 0;
+    Optional<MonobankCurrency> currency = getCurrency(initial, target);
 
-    if (currency.getRateCross() != 0) {
-      ratio = currency.getRateCross();
-    } else if (initial == Currency.UAN) {
-      ratio = currency.getRateSell();
+    if (currency.isPresent()) {
+      MonobankCurrency monobankCurrency = currency.get();
+      if (monobankCurrency.getRateCross() != 0) {
+        ratio = monobankCurrency.getRateCross();
+      } else if (initial == Currency.UAN) {
+        ratio = monobankCurrency.getRateSell();
+      } else {
+        ratio = monobankCurrency.getRateBuy();
+      }
     } else {
-      ratio = currency.getRateBuy();
+      log.error("CurrencyConversionServiceImpl: there is no value in currency.");
     }
+
     log.info("CurrencyConversionServiceImpl: receiving ratio from currency entity");
     return ratio;
   }
 
-  private MonobankCurrency getCurrency(Currency initial, Currency target) {
-    MonobankCurrency currency;
+  private Optional<MonobankCurrency> getCurrency(Currency initial, Currency target) {
+    Optional<MonobankCurrency> currency;
 
     if (target == Currency.UAN) {
       currency = getOneCurrency(initial, target);
     } else {
       currency = getOneCurrency(target, initial);
     }
+
     return currency;
+
   }
 
-  private MonobankCurrency getOneCurrency(Currency initial, Currency target) {
+  private Optional<MonobankCurrency> getOneCurrency(Currency initial, Currency target) {
     log.info("CurrencyConversionServiceImpl: receiving required entity from list of all entities.");
     return allCurrencies.stream().filter(monobankCurrency ->
             monobankCurrency.getCurrencyCodeA() == initial.code
                 && monobankCurrency.getCurrencyCodeB() == target.code)
-        .findAny().get();
+        .findAny();
   }
 
 
