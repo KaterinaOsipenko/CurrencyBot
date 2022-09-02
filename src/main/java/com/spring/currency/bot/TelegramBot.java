@@ -280,12 +280,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         Currency targetCurrency = currencyModeService.getTargetCurrency(chatId);
         for (Currency currency : Currency.values()) {
             buttons.add(Arrays.asList(
-                InlineKeyboardButton.builder().text(getRealCurrencyButton(initialCurrency, currency)).callbackData("INITIAL: " + currency).build(),
-                InlineKeyboardButton.builder().text(getRealCurrencyButton(targetCurrency, currency)).callbackData("TARGET: " + currency).build()));
+                InlineKeyboardButton.builder().text(getRealCurrencyButton(initialCurrency, currency)).callbackData(CallbackTitle.INITIAL.name() + ": " + currency).build(),
+                InlineKeyboardButton.builder().text(getRealCurrencyButton(targetCurrency, currency)).callbackData(CallbackTitle.TARGET.name() + ": " + currency).build()));
         }
         if (this.commandService.getCurrentCommand().equals(CommandTitle.get_rate.label)) {
             buttons.add(Collections.singletonList(
-                InlineKeyboardButton.builder().text("Calculate").callbackData("CALCULATE").build()));
+                InlineKeyboardButton.builder().text("Calculate").callbackData(CallbackTitle.CALCULATE.name()).build()));
         }
 
         return new InlineKeyboardMarkup(buttons);
