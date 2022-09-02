@@ -9,11 +9,9 @@ import com.spring.currency.bot.model.User;
 import com.spring.currency.bot.service.CommandService;
 import com.spring.currency.bot.service.CurrencyConversionService;
 import com.spring.currency.bot.service.CurrencyModeService;
+import com.spring.currency.bot.service.KeyboardService;
 import com.vdurmont.emoji.EmojiParser;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -30,9 +28,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 @Slf4j
@@ -42,13 +38,15 @@ public class TelegramBot extends TelegramLongPollingBot {
     private final BotConfig botConfig;
 
     private final CommandService commandService;
-    @Autowired
-    private  CurrencyModeService currencyModeService;
-    @Autowired
-    private CurrencyConversionService currencyConversionService;
 
     @Autowired
+    private CurrencyConversionService currencyConversionService;
+    @Autowired
+    private CurrencyModeService currencyModeService;
+    @Autowired
     private UserRepository repository;
+    @Autowired
+    private KeyboardService keyboardService;
 
     private final String HELP_TEXT = """
         If you want to start conversation with bot write /start
@@ -86,12 +84,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
-            handleMessage(update.getMessage());
+           handleMessage(update.getMessage());
         } else if (update.hasCallbackQuery()) {
-            handleCallback(update.getCallbackQuery());
+           handleCallback(update.getCallbackQuery());
         }
     }
-
     private void handleCallback(CallbackQuery callback) {
         Currency currency;
         Message message = callback.getMessage();
@@ -109,16 +106,18 @@ public class TelegramBot extends TelegramLongPollingBot {
                 currencyModeService.setTargetCurrency(message.getChatId(), currency);
                 editMessageReplyMarkup(message);
             }
-            case RATE ->  onUpdateReceived(getUpdateForCommand(CommandTitle.get_rate, message));
-            case CONVERSION -> onUpdateReceived(getUpdateForCommand(CommandTitle.set_initial_target_currency, message));
-            case CALCULATE -> sendMessage(message.getChatId(), currencyConversionService.getRate(currencyModeService.getInitialCurrency(message.getChatId()), currencyModeService.getTargetCurrency(message.getChatId())), message.getChat().getUserName());
+            case RATE -> onUpdateReceived(getUpdateForCommand(CommandTitle.get_rate, message));
+            case CONVERSION ->
+                onUpdateReceived(getUpdateForCommand(CommandTitle.set_initial_target_currency, message));
+            case CALCULATE -> sendMessage(message.getChatId(), currencyConversionService.getRate(
+                    currencyModeService.getInitialCurrency(message.getChatId()),
+                    currencyModeService.getTargetCurrency(message.getChatId())),
+                message.getChat().getUserName());
 
             default -> log.error("TelegramBot: Something went wrong in handle callback query method!");
         }
 
-        log.info("TelegramBot: Handle callback query from keyboard.");
     }
-
     private Update getUpdateForCommand(CommandTitle command, Message incomingMsg) {
         Update update = new Update();
         Message message = new Message();
@@ -136,20 +135,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         update.setMessage(message);
         return update;
     }
-
-    private void editMessageReplyMarkup(Message message) {
-        try {
-            execute(
-                EditMessageReplyMarkup.builder()
-                    .chatId(message.getChatId())
-                    .messageId(message.getMessageId())
-                    .replyMarkup(getInlineCurrencyKeyBoard(message.getChatId()))
-                    .build());
-        } catch (TelegramApiException e) {
-            log.error("TelegramBot: Handle Callback: " + e.getMessage());
-        }
-    }
-
     private void handleMessage(Message message) {
         if (message.hasText() && message.hasEntities()) {
             Optional<MessageEntity> messageEntity = message.getEntities().stream()
@@ -166,7 +151,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                                 + ", welcome to the currency bot!" + EmojiParser.parseToUnicode(
                                 ":wave:"), message.getChat().getUserName());
                         sendMessage(message.getChatId(), "What do you want to do?",
-                            getInlineChoiceKeyBoard(),
+                            keyboardService.getInlineChoiceKeyBoard(message.getChatId()),
                             message.getChat().getUserName());
                     }
                     case help -> {
@@ -190,7 +175,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                             CommandTitle.set_initial_target_currency);
                         sendMessage(message.getChatId(),
                             "Choose the initial and target currency:",
-                            getInlineCurrencyKeyBoard(message.getChatId()),
+                            keyboardService.getInlineCurrencyKeyBoard(message.getChatId()),
                             message.getChat().getUserName());
                         commandService.setCurrentCommand(CommandTitle.set_amount);
                         sendMessage(message.getChatId(), "Enter the sum: ",
@@ -205,7 +190,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                         commandService.setCurrentCommand(CommandTitle.get_rate);
                         sendMessage(message.getChatId(),
                             "What currency you are interested in?",
-                            getInlineCurrencyKeyBoard(message.getChatId()),
+                            keyboardService.getInlineCurrencyKeyBoard(message.getChatId()),
                             message.getChat().getUserName());
                     }
                     default -> sendMessage(message.getChatId(),
@@ -256,7 +241,20 @@ public class TelegramBot extends TelegramLongPollingBot {
         return Optional.empty();
     }
 
-    private void registerUser(Message message) {
+    public void editMessageReplyMarkup(Message message) {
+        try {
+            execute(
+                EditMessageReplyMarkup.builder()
+                    .chatId(message.getChatId())
+                    .messageId(message.getMessageId())
+                    .replyMarkup(keyboardService.getInlineCurrencyKeyBoard(message.getChatId()))
+                    .build());
+        } catch (TelegramApiException e) {
+            log.error("TelegramBot: Handle Callback: " + e.getMessage());
+        }
+    }
+
+    public void registerUser(Message message) {
         if(repository.findById(message.getChatId()).isEmpty()) {
             long chatId = message.getChatId();
             Chat chat = message.getChat();
@@ -264,9 +262,8 @@ public class TelegramBot extends TelegramLongPollingBot {
             User user = new User();
             user.setChatId(chatId);
             user.setUsername(chat.getUserName());
-            user.setFirstName(user.getFirstName());
-            System.out.println(user.getFirstName());
-            user.setLastName(user.getLastName());
+            user.setFirstName(chat.getFirstName());
+            user.setLastName(chat.getLastName());
             user.setRegisterDate(new Timestamp(System.currentTimeMillis()));
 
             repository.save(user);
@@ -274,41 +271,10 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private InlineKeyboardMarkup getInlineCurrencyKeyBoard(long chatId) {
-        List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-        Currency initialCurrency = currencyModeService.getInitialCurrency(chatId);
-        Currency targetCurrency = currencyModeService.getTargetCurrency(chatId);
-        for (Currency currency : Currency.values()) {
-            buttons.add(Arrays.asList(
-                InlineKeyboardButton.builder().text(getRealCurrencyButton(initialCurrency, currency)).callbackData(CallbackTitle.INITIAL.name() + ": " + currency).build(),
-                InlineKeyboardButton.builder().text(getRealCurrencyButton(targetCurrency, currency)).callbackData(CallbackTitle.TARGET.name() + ": " + currency).build()));
-        }
-        if (this.commandService.getCurrentCommand().equals(CommandTitle.get_rate.label)) {
-            buttons.add(Collections.singletonList(
-                InlineKeyboardButton.builder().text("Calculate").callbackData(CallbackTitle.CALCULATE.name()).build()));
-        }
-
-        return new InlineKeyboardMarkup(buttons);
-    }
-
-    private InlineKeyboardMarkup getInlineChoiceKeyBoard() {
-        List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-        buttons.add(Arrays.asList(
-            InlineKeyboardButton.builder().text("Find out the current rate").callbackData(
-                CallbackTitle.RATE.name()).build(),
-            InlineKeyboardButton.builder().text("Convert currencies").callbackData(CallbackTitle.CONVERSION.name()).build()));
-        return new InlineKeyboardMarkup(buttons);
-    }
-
-    private String getRealCurrencyButton(Currency saved, Currency currency) {
-        return saved == currency ? currency.name() + EmojiParser.parseToUnicode(":money_with_wings:") : currency.name();
-    }
-
-    private void sendMessage(long chatId, String text, ReplyKeyboard keyboard, String username) {
+    public void sendMessage(long chatId, String text, String username) {
         SendMessage sender = new SendMessage();
         sender.setChatId(chatId);
         sender.setText(text);
-        sender.setReplyMarkup(keyboard);
         try {
             execute(sender);
         } catch (TelegramApiException ex) {
@@ -317,10 +283,12 @@ public class TelegramBot extends TelegramLongPollingBot {
         log.info("TelegramBot: Replied to user: " + username);
     }
 
-    private void sendMessage(long chatId, String text, String username) {
+
+    public void sendMessage(long chatId, String text, ReplyKeyboard keyboard, String username) {
         SendMessage sender = new SendMessage();
         sender.setChatId(chatId);
         sender.setText(text);
+        sender.setReplyMarkup(keyboard);
         try {
             execute(sender);
         } catch (TelegramApiException ex) {

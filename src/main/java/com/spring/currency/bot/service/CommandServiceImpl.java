@@ -16,9 +16,9 @@ public class CommandServiceImpl implements CommandService {
 
   private BotCommand currentCommand;
 
-  public CommandServiceImpl () {
-    log.info("CommandService created!");
-  }
+//  public CommandServiceImpl () {
+//    log.info("CommandService created!");
+//  }
 
   public String getCurrentCommand() {
     return currentCommand.getCommand();
