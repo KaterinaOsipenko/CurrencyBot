@@ -6,7 +6,6 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Configuration;
 
 @SpringBootApplication
-@Configuration
 @EnableCaching
 public class SpingCurrencyBotApplication {
 

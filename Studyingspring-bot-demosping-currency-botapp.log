@@ -8324,3 +8324,41 @@ Caused by: java.io.FileNotFoundException: Could not open ServletContext resource
 	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:207)
 	at org.springframework.context.annotation.ConfigurationClassParser.parse(ConfigurationClassParser.java:175)
 	... 79 common frames omitted
+2022-09-03 21:34:08,986 INFO com.spring.currency.bot.SpingCurrencyBotApplication [main] Starting SpingCurrencyBotApplication using Java 17.0.2 on sladkiychay3005 with PID 14936 (D:\Studying\tg-bots\sping-currency-bot\target\classes started by Дом in D:\Studying\tg-bots\sping-currency-bot)
+2022-09-03 21:34:08,988 INFO com.spring.currency.bot.SpingCurrencyBotApplication [main] No active profile set, falling back to 1 default profile: "default"
+2022-09-03 21:34:09,785 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-09-03 21:34:09,853 INFO org.springframework.data.repository.config.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 58 ms. Found 1 JPA repository interfaces.
+2022-09-03 21:34:10,751 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat initialized with port(s): 8080 (http)
+2022-09-03 21:34:10,767 INFO org.apache.coyote.http11.Http11NioProtocol [main] Initializing ProtocolHandler ["http-nio-8080"]
+2022-09-03 21:34:10,768 INFO org.apache.catalina.core.StandardService [main] Starting service [Tomcat]
+2022-09-03 21:34:10,768 INFO org.apache.catalina.core.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/9.0.65]
+2022-09-03 21:34:10,908 INFO org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [main] Initializing Spring embedded WebApplicationContext
+2022-09-03 21:34:10,908 INFO org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 1872 ms
+2022-09-03 21:34:11,060 INFO org.hibernate.jpa.internal.util.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-09-03 21:34:11,085 INFO org.hibernate.Version [main] HHH000412: Hibernate ORM core version 5.6.10.Final
+2022-09-03 21:34:11,168 INFO org.hibernate.annotations.common.Version [main] HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-09-03 21:34:11,474 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Starting...
+2022-09-03 21:34:13,486 INFO com.zaxxer.hikari.HikariDataSource [main] HikariPool-1 - Start completed.
+2022-09-03 21:34:13,495 INFO org.hibernate.dialect.Dialect [main] HHH000400: Using dialect: org.hibernate.dialect.PostgreSQLDialect
+2022-09-03 21:34:14,002 WARN org.hibernate.engine.jdbc.spi.SqlExceptionHelper [main] SQL Warning Code: 0, SQLState: 00000
+2022-09-03 21:34:14,002 WARN org.hibernate.engine.jdbc.spi.SqlExceptionHelper [main] table "users" does not exist, skipping
+2022-09-03 21:34:14,069 WARN org.hibernate.engine.jdbc.spi.SqlExceptionHelper [main] SQL Warning Code: 0, SQLState: 00000
+2022-09-03 21:34:14,069 WARN org.hibernate.engine.jdbc.spi.SqlExceptionHelper [main] sequence "hibernate_sequence" does not exist, skipping
+2022-09-03 21:34:15,144 INFO org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator [main] HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-09-03 21:34:15,149 INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-09-03 21:34:15,308 INFO com.spring.currency.bot.TelegramBot [main] TelegramBot: Bot creation
+2022-09-03 21:34:15,309 INFO com.spring.currency.bot.service.CommandServiceImpl [main] CommandServiceImpl: Creation bot commands.
+2022-09-03 21:34:15,655 INFO com.spring.currency.bot.TelegramBot [main] TelegramBot: Set commands to the bot
+2022-09-03 21:34:15,815 INFO com.spring.currency.bot.service.HashMapCurrencyModeService [main] HashMapCurrencyService created!
+2022-09-03 21:34:15,854 INFO com.spring.currency.bot.config.BotInitializer [main] Bot init.
+2022-09-03 21:34:15,854 INFO com.spring.currency.bot.TelegramBot [main] TelegramBot: Bot creation
+2022-09-03 21:34:15,855 INFO com.spring.currency.bot.service.CommandServiceImpl [main] CommandServiceImpl: Creation bot commands.
+2022-09-03 21:34:16,006 INFO com.spring.currency.bot.TelegramBot [main] TelegramBot: Set commands to the bot
+2022-09-03 21:34:16,033 WARN org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-09-03 21:34:16,307 INFO org.apache.coyote.http11.Http11NioProtocol [main] Starting ProtocolHandler ["http-nio-8080"]
+2022-09-03 21:34:16,323 INFO org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat started on port(s): 8080 (http) with context path ''
+2022-09-03 21:34:16,335 INFO com.spring.currency.bot.SpingCurrencyBotApplication [main] Started SpingCurrencyBotApplication in 7.661 seconds (JVM running for 8.949)
+2022-09-03 21:43:53,538 INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-09-03 21:43:53,538 INFO org.hibernate.tool.schema.internal.SchemaDropperImpl$DelayedDropActionImpl [SpringApplicationShutdownHook] HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2022-09-03 21:43:53,764 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2022-09-03 21:43:54,404 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
