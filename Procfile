@@ -1,1 +1,1 @@
-web: java -jar build target/sping-currency-bot-0.0.1-SNAPSHOT.jar
+worker: java -Dserver.port=$PORT $JAVA_OPTS -jar target/sping-currency-bot-0.0.1-SNAPSHOT.jar
