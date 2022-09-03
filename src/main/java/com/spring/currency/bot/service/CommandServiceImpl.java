@@ -12,13 +12,9 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 @Slf4j
 public class CommandServiceImpl implements CommandService {
 
-  private  final List<BotCommand> commandList = new ArrayList<>();
+  private List<BotCommand> commandList = new ArrayList<>();
 
   private BotCommand currentCommand;
-
-  public CommandServiceImpl () {
-    log.info("CommandService created!");
-  }
 
   public String getCurrentCommand() {
     return currentCommand.getCommand();
