@@ -554,3 +554,7 @@ com.spring.currency.bot.SpingCurrencyBotApplication#get() mapped.
 2022-09-05 09:47:23,604 INFO org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [RMI TCP Connection(3)-192.168.0.103] Initializing Spring DispatcherServlet 'dispatcherServlet'
 2022-09-05 09:47:23,604 INFO org.springframework.web.servlet.DispatcherServlet [RMI TCP Connection(3)-192.168.0.103] Initializing Servlet 'dispatcherServlet'
 2022-09-05 09:47:23,605 INFO org.springframework.web.servlet.DispatcherServlet [RMI TCP Connection(3)-192.168.0.103] Completed initialization in 1 ms
+2022-09-05 09:51:54,283 INFO org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-09-05 09:51:54,283 INFO org.hibernate.tool.schema.internal.SchemaDropperImpl$DelayedDropActionImpl [SpringApplicationShutdownHook] HHH000477: Starting delayed evictData of schema as part of SessionFactory shut-down'
+2022-09-05 09:51:54,472 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2022-09-05 09:51:55,060 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
