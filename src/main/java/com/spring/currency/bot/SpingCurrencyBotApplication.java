@@ -12,16 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
 @EnableCaching
-@Controller
 public class SpingCurrencyBotApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SpingCurrencyBotApplication.class, args);
-    }
-
-    @PostMapping("/")
-    public String get() {
-        return "Hello";
     }
 
 }
