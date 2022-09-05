@@ -33,10 +33,8 @@ public class TelegramBot extends SpringWebhookBot {
     private final BotConfig botConfig;
     @Autowired
     private CommandService commandService;
-
     @Autowired
     private MessageHandler messageHandler;
-
     @Autowired
     private CurrencyModeService currencyModeService;
     @Autowired
