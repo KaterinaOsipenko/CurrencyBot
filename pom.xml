@@ -8,14 +8,14 @@
         <version>2.7.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
+    <groupId>com.spring.currency.bot</groupId>
     <artifactId>sping-currency-bot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>sping-currency-bot</name>
     <description>sping-currency-bot</description>
     <packaging>jar</packaging>
     <properties>
-        <java.version>17</java.version>
+        <java.version>17.0.2</java.version>
     </properties>
     <dependencies>
 

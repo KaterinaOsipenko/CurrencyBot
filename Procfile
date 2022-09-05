@@ -1,1 +1,1 @@
-web: java -jar target/sping-currency-bot-0.0.1-SNAPSHOT.jar
+web: java -jar sping-currency-bot-0.0.1-SNAPSHOT.jar
