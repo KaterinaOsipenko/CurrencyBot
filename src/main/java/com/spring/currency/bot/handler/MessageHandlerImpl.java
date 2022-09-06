@@ -48,19 +48,17 @@ public class MessageHandlerImpl implements MessageHandler {
         String command = message.getText().substring(1);
         CommandTitle title = CommandTitle.valueOf(command);
         switch (title) {
-          case start -> {
+          case start :
             userService.registerUser(message);
             commandService.setCurrentCommand(CommandTitle.start);
            return SendMessage.builder().chatId(message.getChatId()).text( "Hello, " + message.getChat().getFirstName()
                 + ", welcome to the currency bot!" + EmojiParser.parseToUnicode(":wave:") +
                 "\nWhat do you want to do?")
                 .replyMarkup(keyboardService.getInlineChoiceKeyBoard(message.getChatId())).build();
-          }
-          case help -> {
+          case help:
             commandService.setCurrentCommand(CommandTitle.help);
            return SendMessage.builder().chatId(message.getChatId()).text(HELP_TEXT).build();
-          }
-          case check_initial_target_currency -> {
+          case check_initial_target_currency:
             commandService.setCurrentCommand(
                 CommandTitle.check_initial_target_currency);
 
@@ -68,8 +66,7 @@ public class MessageHandlerImpl implements MessageHandler {
                 + currencyModeService.getInitialCurrency(
                 message.getChatId()) + " and target currency is "
                 + currencyModeService.getTargetCurrency(message.getChatId())).build();
-          }
-          case set_initial_target_currency -> {
+          case set_initial_target_currency:
             commandService.setCurrentCommand(
                 CommandTitle.set_initial_target_currency);
 
@@ -78,19 +75,17 @@ public class MessageHandlerImpl implements MessageHandler {
            return SendMessage.builder().chatId(message.getChatId()).text("Choose the initial, target currency and enter the sum:")
                 .replyMarkup(keyboardService.getInlineCurrencyKeyBoard(message.getChatId()))
                 .build();
-          }
-          case set_amount -> {
+          case set_amount:
             commandService.setCurrentCommand(CommandTitle.set_amount);
 
            return SendMessage.builder().chatId(message.getChatId()).text("Enter the sum: ").build();
-          }
-          case get_rate -> {
+          case get_rate:
             commandService.setCurrentCommand(CommandTitle.get_rate);
 
             return SendMessage.builder().chatId(message.getChatId()).text("What currency you are interested in?")
                     .replyMarkup(keyboardService.getInlineCurrencyKeyBoard(message.getChatId())).build();
-          }
-          default -> SendMessage.builder().chatId(message.getChatId()).text("Sorry, command was not recognized. PLease, choose another one.").build();
+          default:
+            SendMessage.builder().chatId(message.getChatId()).text("Sorry, command was not recognized. PLease, choose another one.").build();
         }
       }
     } else if (message.hasText()) {

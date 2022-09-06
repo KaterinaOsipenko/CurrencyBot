@@ -82,30 +82,28 @@ public class TelegramBot extends SpringWebhookBot {
         CallbackTitle action = CallbackTitle.valueOf(param[0]);
 
         switch (action) {
-            case INITIAL -> {
+            case INITIAL:
                 currency = Currency.valueOf(param[1].trim());
                 currencyModeService.setInitialCurrency(message.getChatId(), currency);
                 return editMessageReplyMarkup(message);
-            }
-            case TARGET -> {
+            case TARGET:
                 currency = Currency.valueOf(param[1].trim());
                 currencyModeService.setTargetCurrency(message.getChatId(), currency);
                 return editMessageReplyMarkup(message);
-            }
-            case RATE -> {
+            case RATE:
                 return getUpdateForCommand(CommandTitle.get_rate, message);
-            }
-            case CONVERSION -> {
+
+            case CONVERSION:
                 return getUpdateForCommand(CommandTitle.set_initial_target_currency, message);
-            }
-            case CALCULATE -> {
+
+            case CALCULATE:
                 return SendMessage.builder().chatId(message.getChatId())
                     .text(currencyConversionService.getRate(
                         currencyModeService.getInitialCurrency(message.getChatId()),
                         currencyModeService.getTargetCurrency(message.getChatId()))).build();
-            }
 
-            default -> log.error("TelegramBot: Something went wrong in handle callback query method!");
+            default:
+                log.error("TelegramBot: Something went wrong in handle callback query method!");
         }
         return null;
     }
