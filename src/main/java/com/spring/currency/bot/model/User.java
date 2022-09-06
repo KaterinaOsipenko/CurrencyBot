@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 @Setter
 @ToString
 @Entity(name = "User")
-@Table(name = "Users")
+@Table(name = "User")
 public class User implements Serializable {
 
     @Id
