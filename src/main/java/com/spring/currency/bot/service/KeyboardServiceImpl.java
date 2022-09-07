@@ -40,12 +40,13 @@ public class KeyboardServiceImpl implements KeyboardService {
       buttons.add(Collections.singletonList(
           InlineKeyboardButton.builder().text("Calculate").callbackData(CallbackTitle.CALCULATE.name()).build()));
     }
-
+    log.info("KeyboardServiceImpl: get inline currency keyboard");
     return new InlineKeyboardMarkup(buttons);
   }
 
   @Override
   public InlineKeyboardMarkup getInlineChoiceKeyBoard(long chatId) {
+    log.info("KeyboardServiceImpl: get inline choice keyboard");
     List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
     buttons.add(Arrays.asList(
         InlineKeyboardButton.builder().text("Find out the current rate").callbackData(

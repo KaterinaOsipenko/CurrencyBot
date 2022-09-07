@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
       repository.save(user);
 
-      log.info("Registered user with username: " + user);
+      log.info("UserServiceImpl: Registered user with username: " + user);
     }
   }
 }

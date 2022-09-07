@@ -26,18 +26,15 @@ public class MonobankService implements MonobankServiceAPI{
     if (!currencies.getStatusCode().is2xxSuccessful()) {
       handleException(currencies);
     }
-    log.info("Receiving all currencies from API response.");
+    log.info("MonobankService: Receiving all currencies from API response.");
     return Arrays.asList(Objects.requireNonNull(currencies.getBody()));
   }
-
-
-
   private void handleException(ResponseEntity response) {
     if (response.getStatusCode() == HttpStatus.valueOf(429)) {
-      log.error("Throw 429 exception from connector.");
+      log.error("MonobankService: Throw 429 exception from connector.");
       throw new TooManyRequestException(response.getStatusCode());
     }
-    log.error("Throw runtime exception from connector.");
+    log.error("MonobankService: Throw runtime exception from connector.");
     throw new RuntimeException(String.valueOf(response.getStatusCode()));
   }
 }

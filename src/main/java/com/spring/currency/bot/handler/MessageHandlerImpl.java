@@ -96,7 +96,7 @@ public class MessageHandlerImpl implements MessageHandler {
     } else if (message.hasText()) {
       return SendMessage.builder().chatId(message.getChatId()).text(handleMessageDigit(message)).build();
     }
-    log.info("TelegramBot: Handle message.");
+    log.info("MessageHandlerImpl: Handle message.");
     return null;
   }
 
@@ -116,7 +116,7 @@ public class MessageHandlerImpl implements MessageHandler {
             value.get(), initialCurrency, resValue, targetCurrency);
       } catch (HttpClientErrorException ex) {
         messageToSend = "Please, retry after a few seconds.";
-        log.error("TelegramBot: Runtime exception: " + ex.getMessage());
+        log.error("MessageHandlerImpl: Runtime exception: " + ex.getMessage());
       }
     } else {
       messageToSend = "Please, write only a digit number!";
@@ -129,7 +129,7 @@ public class MessageHandlerImpl implements MessageHandler {
       try {
         return Optional.of(Double.valueOf(messageText));
       } catch (Exception e) {
-        log.error("TelegramBot: Error parsing double: " + e.getMessage());
+        log.error("MessageHandlerImpl: Error parsing double: " + e.getMessage());
         return Optional.empty();
       }
     }

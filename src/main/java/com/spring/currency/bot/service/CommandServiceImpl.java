@@ -2,6 +2,7 @@ package com.spring.currency.bot.service;
 
 
 import com.spring.currency.bot.model.CommandTitle;
+import com.spring.currency.bot.utils.CommandDescription;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 @Slf4j
 public class CommandServiceImpl implements CommandService {
 
-  private List<BotCommand> commandList = new ArrayList<>();
+  private final List<BotCommand> commandList = new ArrayList<>();
 
   private BotCommand currentCommand;
 
@@ -30,12 +31,12 @@ public class CommandServiceImpl implements CommandService {
 
   @Override
   public List<BotCommand> getListOfBotCommands() {
-    commandList.add(new BotCommand(CommandTitle.start.label, "get a welcome message"));
-    commandList.add(new BotCommand(CommandTitle.set_initial_target_currency.label, "set initial and target currency"));
-    commandList.add(new BotCommand(CommandTitle.help.label, "more info"));
-    commandList.add(new BotCommand(CommandTitle.set_amount.label, "set the amount you want to transfer"));
-    commandList.add(new BotCommand(CommandTitle.check_initial_target_currency.label, "check your currency"));
-    commandList.add(new BotCommand(CommandTitle.get_rate.label, "get actual rate"));
+    commandList.add(new BotCommand(CommandTitle.start.label, CommandDescription.startDesc));
+    commandList.add(new BotCommand(CommandTitle.set_initial_target_currency.label, CommandDescription.setCurrencyDesc));
+    commandList.add(new BotCommand(CommandTitle.help.label, CommandDescription.helpDesc));
+    commandList.add(new BotCommand(CommandTitle.set_amount.label, CommandDescription.setAmountDesc));
+    commandList.add(new BotCommand(CommandTitle.check_initial_target_currency.label, CommandDescription.checkCurrencyDesc));
+    commandList.add(new BotCommand(CommandTitle.get_rate.label, CommandDescription.getRateDesc));
     log.info("CommandServiceImpl: Creation bot commands.");
     return commandList;
   }
