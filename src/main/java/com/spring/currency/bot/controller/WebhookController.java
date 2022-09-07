@@ -24,8 +24,8 @@ public class WebhookController {
     log.info("WebhookController: controller updating by id:" + update.getUpdateId());
     return telegramBot.onWebhookUpdateReceived(update);
   }
-//  @GetMapping("/")
-//  public ResponseEntity<?> onUpdateReceived() {
-//    return new ResponseEntity<>(HttpStatus.OK, HttpStatus.valueOf("OK"));
-//  }
+  @GetMapping("/")
+  public ResponseEntity<?> onUpdateReceived() {
+    return new ResponseEntity<>(HttpStatus.OK, HttpStatus.valueOf("OK"));
+  }
 }
