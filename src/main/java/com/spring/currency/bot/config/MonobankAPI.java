@@ -11,9 +11,6 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("application.properties")
 public class MonobankAPI {
 
-  @Value("${monobank.token}")
-  private String token;
-
   @Value("${monobank.url}")
   private String url;
 
