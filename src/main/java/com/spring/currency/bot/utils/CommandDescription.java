@@ -1,5 +1,8 @@
 package com.spring.currency.bot.utils;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class CommandDescription {
 
   public static final String startDesc = "get a welcome message";

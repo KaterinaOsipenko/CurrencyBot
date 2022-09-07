@@ -31,13 +31,13 @@ public class CommandServiceImpl implements CommandService {
 
   @Override
   public List<BotCommand> getListOfBotCommands() {
+    log.info("CommandServiceImpl: Creation bot commands.");
     commandList.add(new BotCommand(CommandTitle.start.label, CommandDescription.startDesc));
     commandList.add(new BotCommand(CommandTitle.set_initial_target_currency.label, CommandDescription.setCurrencyDesc));
     commandList.add(new BotCommand(CommandTitle.help.label, CommandDescription.helpDesc));
     commandList.add(new BotCommand(CommandTitle.set_amount.label, CommandDescription.setAmountDesc));
     commandList.add(new BotCommand(CommandTitle.check_initial_target_currency.label, CommandDescription.checkCurrencyDesc));
     commandList.add(new BotCommand(CommandTitle.get_rate.label, CommandDescription.getRateDesc));
-    log.info("CommandServiceImpl: Creation bot commands.");
     return commandList;
   }
 }
