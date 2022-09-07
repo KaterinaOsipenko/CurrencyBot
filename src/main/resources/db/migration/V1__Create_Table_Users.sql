@@ -1,5 +1,5 @@
-CREATE TABLE user (
-                      chat_id int(20)
+CREATE TABLE USER (
+                      chat_id serial
                           primary key,
                       first_name    varchar(255),
                       last_name     varchar(255),
