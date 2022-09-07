@@ -1,4 +1,4 @@
-CREATE TABLE USER (
+CREATE TABLE users (
                       chat_id serial
                           primary key,
                       first_name    varchar(255),
