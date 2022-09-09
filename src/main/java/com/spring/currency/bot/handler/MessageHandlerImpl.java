@@ -32,11 +32,11 @@ public class MessageHandlerImpl implements MessageHandler {
   @Autowired
   private CurrencyModeService currencyModeService;
 
-  private final String HELP_TEXT = "If you want to start conversation with bot write /start" +
-        "If you would like to set initial and target currency write /set_initial_target_currency" +
-        "If you would like to set the amount write /set_amount" +
-        "If you want to find out your current mode of currencies write /check_initial_target_currency" +
-       " Make note: the default value of initial currency is UAN, the default value of target currency is USD!";
+  private final String HELP_TEXT = "If you want to start conversation with bot write /start " +
+        "If you would like to set initial and target currency write /set_initial_target_currency " +
+        "If you would like to set the amount write /set_amount " +
+        "If you want to find out your current mode of currencies write /check_initial_target_currency " +
+       " Make note: the default value of initial currency is UAN, the default value of target currency is USD! ";
 
 
   @Override
