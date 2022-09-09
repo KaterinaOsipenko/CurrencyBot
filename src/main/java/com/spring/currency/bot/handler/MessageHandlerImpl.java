@@ -46,7 +46,14 @@ public class MessageHandlerImpl implements MessageHandler {
           .filter(e -> "bot_command".equals(e.getType())).findFirst();
       if (messageEntity.isPresent()) {
         String command = message.getText().substring(1);
-        CommandTitle title = CommandTitle.valueOf(command);
+        CommandTitle[] commandTitles = CommandTitle.values();
+        CommandTitle title = null;
+        for (CommandTitle titles : commandTitles) {
+          if (command.contains(titles.toString())) {
+             title = CommandTitle.valueOf(command);
+             break;
+          }
+        }
         switch (title) {
           case start:
             userService.registerUser(message);
