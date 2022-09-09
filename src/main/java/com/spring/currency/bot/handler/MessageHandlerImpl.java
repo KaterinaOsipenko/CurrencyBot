@@ -8,6 +8,7 @@ import com.spring.currency.bot.service.CurrencyModeService;
 import com.spring.currency.bot.service.KeyboardService;
 import com.spring.currency.bot.service.UserService;
 import com.vdurmont.emoji.EmojiParser;
+import java.util.Arrays;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,14 +47,8 @@ public class MessageHandlerImpl implements MessageHandler {
           .filter(e -> "bot_command".equals(e.getType())).findFirst();
       if (messageEntity.isPresent()) {
         String command = message.getText().substring(1);
-        CommandTitle[] commandTitles = CommandTitle.values();
-        CommandTitle title = null;
-        for (CommandTitle titles : commandTitles) {
-          if (command.contains(titles.toString())) {
-             title = CommandTitle.valueOf(command);
-             break;
-          }
-        }
+        CommandTitle title = CommandTitle.valueOf(command);
+//        CommandTitle title = checkCommand(command);
         switch (title) {
           case start:
             userService.registerUser(message);
@@ -105,6 +100,13 @@ public class MessageHandlerImpl implements MessageHandler {
     }
     log.info("MessageHandlerImpl: Handle message.");
     return null;
+  }
+
+  private CommandTitle checkCommand(String command) {
+    CommandTitle title = Arrays.stream(CommandTitle.values())
+        .filter(titles -> command.contains(titles.toString())).findFirst()
+        .map(titles -> CommandTitle.valueOf(titles.toString())).orElse(null);
+    return title;
   }
 
   private String handleMessageDigit(Message message) {

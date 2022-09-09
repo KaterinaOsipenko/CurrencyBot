@@ -17,7 +17,6 @@ import java.sql.Timestamp;
 public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long chatId;
 
     @Column(name = "username")
